@@ -2,8 +2,10 @@ package org.nands.app.listeners;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.SessionCookieConfig;
 import jakarta.servlet.annotation.WebListener;
 
+import org.nands.app.config.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +43,31 @@ public class AppContextListener
 
             log.info(
                     "Application started successfully"
+            );
+
+            // SESSION TIMEOUT
+
+            sce.getServletContext()
+                    .setSessionTimeout(
+                            SecurityConfig.SESSION_TIMEOUT
+                    );
+
+            // COOKIE CONFIG
+
+            SessionCookieConfig cookieConfig =
+                    sce.getServletContext()
+                            .getSessionCookieConfig();
+
+            cookieConfig.setHttpOnly(
+                    SecurityConfig.COOKIE_HTTP_ONLY
+            );
+
+            cookieConfig.setSecure(
+                    SecurityConfig.COOKIE_SECURE
+            );
+
+            cookieConfig.setName(
+                    SecurityConfig.SESSION_COOKIE_NAME
             );
 
         } catch (Exception e) {

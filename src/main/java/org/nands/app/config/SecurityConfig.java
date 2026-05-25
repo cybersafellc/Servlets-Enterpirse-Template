@@ -26,6 +26,22 @@ public class SecurityConfig {
     public static final long
             JWT_EXPIRE =
             1000L * 60 * 60 * 24;
+    public static final int
+            SESSION_TIMEOUT = 1800;
+
+    public static final int
+            MAX_UPLOAD_SIZE =
+            10 * 1024 * 1024;
+
+    public static final boolean
+            DEBUG =
+            Boolean.parseBoolean(
+                    System.getenv()
+                            .getOrDefault(
+                                    "APP_DEBUG",
+                                    "false"
+                            )
+            );
 
     private SecurityConfig() {
     }
