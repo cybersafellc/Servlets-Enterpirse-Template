@@ -16,8 +16,7 @@ import org.nands.app.services.UserService;
 import java.io.IOException;
 
 @WebServlet("/register")
-public class RegisterController
-        extends HttpServlet {
+public class RegisterController extends HttpServlet {
 
     private final UserService userService =
             new UserService();

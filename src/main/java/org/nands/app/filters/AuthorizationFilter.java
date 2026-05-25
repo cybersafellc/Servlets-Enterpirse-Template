@@ -19,7 +19,7 @@ public class AuthorizationFilter implements Filter {
 
         boolean isLogin = session != null && session.getAttribute("user") != null;
 
-        if(!isLogin){
+        if(!isLogin) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
