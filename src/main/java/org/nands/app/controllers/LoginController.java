@@ -31,6 +31,8 @@ public class LoginController extends HttpServlet {
 
         User userExist = userService.login(user);
 
+        req.changeSessionId();
+
         HttpSession session = req.getSession();
 
         session.setAttribute("user", userExist);
