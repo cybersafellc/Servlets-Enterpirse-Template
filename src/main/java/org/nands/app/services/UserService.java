@@ -1,6 +1,9 @@
 package org.nands.app.services;
 
 import org.nands.app.dto.CreateUserRequest;
+import org.nands.app.dto.UserLogin;
+import org.nands.app.exceptions.BadRequestException;
+import org.nands.app.exceptions.NotFoundException;
 import org.nands.app.exceptions.ValidationException;
 import org.nands.app.models.User;
 import org.nands.app.repositories.UserRepository;
@@ -63,6 +66,18 @@ public class UserService {
         return user;
     }
 
+    public User login(UserLogin user){
+        validateLogin(user);
+        User userExist = userRepository.findByEmail(user.getEmail());
+        if(userExist == null){
+            throw new NotFoundException("user with the username does'nt exist");
+        }
+        if(!PasswordUtil.verify(user.getPassword(), userExist.getPassword())){
+            throw new BadRequestException("password incorect");
+        }
+        return userExist;
+    }
+
     /**
      * VALIDATION
      */
@@ -99,6 +114,15 @@ public class UserService {
             throw new ValidationException(
                     "Name required"
             );
+        }
+    }
+
+    private void validateLogin(UserLogin user){
+        if(user.getEmail() == null || user.getEmail().isBlank()){
+            throw new ValidationException("Email required");
+        }
+        if(user.getPassword() == null || user.getPassword().isBlank()){
+            throw new ValidationException("Password required");
         }
     }
 }

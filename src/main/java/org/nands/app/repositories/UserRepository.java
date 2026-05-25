@@ -22,17 +22,14 @@ import java.util.UUID;
 
 public class UserRepository {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(
-                    UserRepository.class
+    private static final Logger log = LoggerFactory.getLogger(UserRepository.class
             );
 
     private final DataSource dataSource;
 
     public UserRepository() {
 
-        this.dataSource =
-                DatabaseConfig.getDataSource();
+        this.dataSource = DatabaseConfig.getDataSource();
     }
 
     /**
@@ -52,11 +49,8 @@ public class UserRepository {
                 """;
 
         try (
-                Connection conn =
-                        dataSource.getConnection();
-
-                PreparedStatement ps =
-                        conn.prepareStatement(sql)
+                Connection conn = dataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
             ps.setString(
@@ -105,8 +99,7 @@ public class UserRepository {
     /**
      * FIND BY ID
      */
-    public User findById(
-            String id) {
+    public User findById(String id) {
 
         String sql = """
                 SELECT *
