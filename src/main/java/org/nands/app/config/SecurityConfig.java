@@ -13,7 +13,7 @@ public class SecurityConfig {
             COOKIE_HTTP_ONLY = true;
 
     public static final boolean
-            COOKIE_SECURE = true;
+            COOKIE_SECURE = false;
 
     public static final String
             CSRF_TOKEN_NAME =

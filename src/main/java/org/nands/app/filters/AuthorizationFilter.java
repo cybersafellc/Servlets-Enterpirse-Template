@@ -23,6 +23,7 @@ public class AuthorizationFilter implements Filter {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+        req.setAttribute("user", session.getAttribute("user"));
         chain.doFilter(request, response);
     }
 }

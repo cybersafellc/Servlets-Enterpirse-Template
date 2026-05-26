@@ -7,9 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.nands.app.config.AppConfig;
+import org.nands.app.config.SecurityConfig;
 import org.nands.app.dto.UserLogin;
+import org.nands.app.exceptions.BadRequestException;
 import org.nands.app.models.User;
 import org.nands.app.services.UserService;
+import org.nands.app.utils.CsrfUtil;
 
 import java.io.IOException;
 
@@ -19,12 +22,22 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(req.getContextPath());
+        String csrfToken = CsrfUtil.generate();
+        HttpSession session = req.getSession();
+        session.setAttribute(SecurityConfig.CSRF_TOKEN_NAME, csrfToken);
+        req.setAttribute(SecurityConfig.CSRF_TOKEN_NAME, csrfToken);
         req.getRequestDispatcher(AppConfig.VIEW + "login.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String csrfToken = (String) session.getAttribute(SecurityConfig.CSRF_TOKEN_NAME);
+        String reqCsrfToken = req.getParameter(SecurityConfig.CSRF_TOKEN_NAME);
+        if(session == null || csrfToken == null || reqCsrfToken == null || !csrfToken.equals(reqCsrfToken)){
+            throw new BadRequestException("csrf token invalid");
+        }
+
         UserLogin user = new UserLogin();
         user.setEmail(req.getParameter("email"));
         user.setPassword(req.getParameter("password"));
@@ -32,8 +45,6 @@ public class LoginController extends HttpServlet {
         User userExist = userService.login(user);
 
         req.changeSessionId();
-
-        HttpSession session = req.getSession();
 
         session.setAttribute("user", userExist);
         session.setAttribute("role", userExist.getRole());

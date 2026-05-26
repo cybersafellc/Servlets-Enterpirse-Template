@@ -1,3 +1,5 @@
+<%@ taglib prefix="c"
+    uri="jakarta.tags.core" %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -74,6 +76,16 @@
                         id="exampleInputPassword1"
                       />
                     </div>
+                    <div class="d-none">
+                                          <input
+                                            name="_csrf"
+                                            type="text"
+                                            value=<c:out value="${_csrf}"/>
+                                            class="form-control d-none"
+                                            id="exampleInputPassword1"
+                                          />
+                                        </div>
+
                     <button
                       type="submit"
                       class="btn btn-primary w-100 py-8 fs-4 mb-4"

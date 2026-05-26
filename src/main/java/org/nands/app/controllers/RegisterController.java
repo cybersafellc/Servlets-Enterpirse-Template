@@ -7,11 +7,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import jakarta.servlet.http.HttpSession;
+import org.nands.app.config.SecurityConfig;
 import org.nands.app.dto.CreateUserRequest;
 
+import org.nands.app.exceptions.BadRequestException;
 import org.nands.app.models.User;
 
 import org.nands.app.services.UserService;
+import org.nands.app.utils.CsrfUtil;
 
 import java.io.IOException;
 
@@ -27,6 +31,12 @@ public class RegisterController extends HttpServlet {
             HttpServletResponse resp)
             throws ServletException, IOException {
 
+        String csrfToken = CsrfUtil.generate();
+
+        req.setAttribute(SecurityConfig.CSRF_TOKEN_NAME, csrfToken);
+        HttpSession session = req.getSession();
+        session.setAttribute(SecurityConfig.CSRF_TOKEN_NAME, csrfToken);
+
         req.getRequestDispatcher(
                 "/WEB-INF/views/register.jsp"
         ).forward(req, resp);
@@ -37,6 +47,17 @@ public class RegisterController extends HttpServlet {
             HttpServletRequest req,
             HttpServletResponse resp)
             throws ServletException, IOException {
+
+        HttpSession session = req.getSession(false);
+
+        String  csrf = (String) session.getAttribute(SecurityConfig.CSRF_TOKEN_NAME);
+        String reqCsrf = req.getParameter(SecurityConfig.CSRF_TOKEN_NAME);
+
+        System.out.println(reqCsrf);
+
+        if(session == null || csrf == null || reqCsrf == null || !csrf.equals(reqCsrf)){
+            throw new BadRequestException("csrf token invalid");
+        }
 
         CreateUserRequest request =
                 new CreateUserRequest();

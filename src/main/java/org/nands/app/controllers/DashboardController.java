@@ -15,9 +15,7 @@ import java.io.IOException;
 public class DashboardController  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        User user = (User) session.getAttribute("user");
-        req.setAttribute("user", user);
+        req.setAttribute("user", req.getAttribute("user"));
         req.getRequestDispatcher(AppConfig.VIEW + "users.jsp").forward(req, resp);
     }
 }
