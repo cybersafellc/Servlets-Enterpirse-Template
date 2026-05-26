@@ -26,6 +26,20 @@ public class GlobalExceptionFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         try {
+            System.out.println("hello logging filter..");
+
+            String method = req.getMethod();
+
+            String uri = req.getRequestURI();
+
+            String ip = req.getRemoteAddr();
+
+            log.info(
+                    "{} {} from {}",
+                    method,
+                    uri,
+                    ip
+            );
 
             chain.doFilter(request, response);
 
