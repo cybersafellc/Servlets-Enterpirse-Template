@@ -34,12 +34,22 @@
               <div class="card mb-0">
                 <div class="card-body">
                   <a
-                    href="./index.html"
+                    href="./dashboard"
                     class="text-nowrap logo-img text-center d-block py-3 w-100"
                   >
                     <img src="assets/images/logos/logo.svg" alt="" />
                   </a>
                   <p class="text-center">Your Social Campaigns</p>
+                  <c:if test="${not empty success}">
+
+                      <div class="alert alert-success"
+                           role="alert">
+
+                          ${success}
+
+                      </div>
+
+                  </c:if>
                   <form method="post">
                     <div class="mb-3">
                       <label for="exampleInputtext1" class="form-label"
