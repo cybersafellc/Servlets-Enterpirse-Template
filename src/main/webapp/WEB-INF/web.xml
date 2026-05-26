@@ -18,4 +18,27 @@
         <location>/errors/500.jsp</location>
     </error-page>
 
+    <!-- REGISTER FILTER -->
+    <filter>
+        <filter-name>DummyFilter</filter-name>
+        <filter-class>org.nands.app.filters.DummyFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>GlobalExceptionFilter</filter-name>
+        <filter-class>org.nands.app.filters.GlobalExceptionFilter</filter-class>
+    </filter>
+
+    <!-- PRIORITY -->
+    <!-- LoggingFilter jalan dulu -->
+    <filter-mapping>
+        <filter-name>GlobalExceptionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DummyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
 </web-app>
